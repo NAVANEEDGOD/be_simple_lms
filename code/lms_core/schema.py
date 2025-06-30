@@ -1,8 +1,25 @@
 from ninja import Schema
 from typing import Optional
-from datetime import datetime
+from datetime import date, datetime
 
 from django.contrib.auth.models import User
+
+# Category UAS
+
+# schemas.py
+
+class CategoryIn(Schema):
+    name: str
+
+class CategoryOut(Schema):
+    id: int
+    name: str
+    creator_id: int
+
+# Category UAS
+
+
+
 
 class UserOut(Schema):
     id: int
@@ -11,7 +28,7 @@ class UserOut(Schema):
     last_name: str
 
 
-class CourseSchemaOut(Schema):
+class CourseOut(Schema):
     id: int
     name: str
     description: str
@@ -23,23 +40,24 @@ class CourseSchemaOut(Schema):
 
 class CourseMemberOut(Schema):
     id: int 
-    course_id: CourseSchemaOut
+    course_id: CourseOut
     user_id: UserOut
     roles: str
     # created_at: datetime
 
 
-class CourseSchemaIn(Schema):
+class CourseIn(Schema):
     name: str
     description: str
     price: int
+    category_id: int 
 
 
 class CourseContentMini(Schema):
     id: int
     name: str
     description: str
-    course_id: CourseSchemaOut
+    course_id: CourseOut
     created_at: datetime
     updated_at: datetime
 
@@ -50,7 +68,7 @@ class CourseContentFull(Schema):
     description: str
     video_url: Optional[str]
     file_attachment: Optional[str]
-    course_id: CourseSchemaOut
+    course_id: CourseOut
     created_at: datetime
     updated_at: datetime
 
@@ -64,3 +82,52 @@ class CourseCommentOut(Schema):
 
 class CourseCommentIn(Schema):
     comment: str
+
+# FeedBack UAS
+
+class FeedbackIn(Schema):
+    course_id: int
+    message : str
+    rating: int
+
+class FeedbackOut(Schema):
+    id: int
+    course_id: int
+    user_id: int
+    message: str
+    rating: int
+    created_at: datetime
+
+# FeedBack UAS
+
+# Bookmark UAS
+
+class BookmarkIn(Schema):
+    course_id : int
+    content_id : int
+
+class BookmarkOut(Schema):
+    id:int
+    user_id:int
+    course_id:int
+    content_id:int
+
+# Bookmark UAS
+
+# Announcment UAS
+
+class AnnouncementIn(Schema):
+    course_id: int
+    title: str
+    content: str
+    publish_date: date
+
+class AnnouncementOut(Schema):
+    id: int
+    course_id: int
+    title: str
+    content: str
+    publish_date: date
+
+# Announcment UAS
+

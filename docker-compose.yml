@@ -11,7 +11,7 @@ services:
     volumes:
       - ./php_code:/var/www/html
     ports:
-      - 8080:80
+      - 8081:80
     depends_on:
       - mysql
   mysql:
@@ -22,6 +22,8 @@ services:
       MYSQL_DATABASE: mydatabase
       MYSQL_USER: myuser
       MYSQL_PASSWORD: mypassword
+    ports:
+      - 3306:3306
     volumes:
       - mysql_data:/var/lib/mysql
   redis:

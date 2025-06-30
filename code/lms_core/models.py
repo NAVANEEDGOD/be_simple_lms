@@ -2,11 +2,23 @@ from django.db import models
 from django.contrib.auth.models import User
 
 # Create your models here.
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=100)
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name="categories")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+
 class Course(models.Model):
     name = models.CharField("Nama Kursus", max_length=255)
     description = models.TextField("Deskripsi")
     price = models.IntegerField("Harga")
     image = models.ImageField("Gambar", upload_to="course", blank=True, null=True)
+    category = models.ForeignKey(Category,on_delete=models.SET_NULL , null=True , blank=True, related_name="courses")
     teacher = models.ForeignKey(User, verbose_name="Pengajar", on_delete=models.RESTRICT)
     created_at = models.DateTimeField("Dibuat pada", auto_now_add=True)
     updated_at = models.DateTimeField("Diperbarui pada", auto_now=True)
@@ -70,3 +82,41 @@ class Comment(models.Model):
 
     def __str__(self) -> str:
         return "Komen: "+self.member_id.user_id+"-"+self.comment
+
+
+class Feedback(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='feedbacks')
+    user = models.ForeignKey(User , on_delete=models.CASCADE , related_name='feedbacks')
+    message = models.TextField()
+    rating = models.IntegerField(null=True,blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return  "Feedback: "+ self.user.username + "-"  + self.course.title
+
+class Bookmark(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE ,blank=True, null=True, related_name="bookmarks")
+    course = models.ForeignKey(Course,on_delete=models.CASCADE)
+    content = models.ForeignKey(CourseContent,on_delete=models.CASCADE)
+
+    # class Meta:
+    #     unique_together = ("user","CourseContent")
+    
+    def __str__(self):
+        return self.user.username + " bookmarked " + self.content.title
+
+class Announcement(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE , related_name="announcements")
+    title = models.CharField(max_length=255)
+    content = models.TextField()
+    publish_date = models.DateField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-publish_date']
+    
+    def __str__(self):
+        return self.title (self.content.title)
+

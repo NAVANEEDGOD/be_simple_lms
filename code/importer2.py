@@ -63,16 +63,16 @@ with open(filepath+'contents.json') as jsonfile:
     CourseContent.objects.bulk_create(obj_create)
 
 
-with open(filepath+'comments.json') as jsonfile:
-    comments = json.load(jsonfile)
-    obj_create = []
-    for num, row in enumerate(comments):
-        if int(row['user_id']) > 50:
-            row['user_id'] = randint(5, 40)
-        if not Comment.objects.filter(pk=num+1).exists():
-            obj_create.append(Comment(content_id=CourseContent.objects.get(pk=int(row['content_id'])), 
-                                   member_id=User.objects.get(pk=int(row['user_id'])), 
-                                   comment=row['comment']))
-    Comment.objects.bulk_create(obj_create)
+# with open(filepath+'comments.json') as jsonfile:
+#     comments = json.load(jsonfile)
+#     obj_create = []
+#     for num, row in enumerate(comments):
+#         if int(row['user_id']) > 50:
+#             row['user_id'] = randint(5, 40)
+#         if not Comment.objects.filter(pk=num+1).exists():
+#             obj_create.append(Comment(content_id=CourseContent.objects.get(pk=int(row['content_id'])), 
+#                                    member_id=User.objects.get(pk=int(row['user_id'])), 
+#                                    comment=row['comment']))
+#     Comment.objects.bulk_create(obj_create)
 
 print("--- %s seconds ---" % (time.time() - start_time))
